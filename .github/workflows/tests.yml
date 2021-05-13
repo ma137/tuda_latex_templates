@@ -12,6 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: ls -al
-      # - run: sudo apt update
-      # - run: sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-lang-cyrillic
+      - run: sudo apt update
+      - run: sudo apt install texlive-latex-recommended
+      - run: echo '\shipout\hbox{}\end' | pdftex
+      - run: cp texput.pdf example/tuda_logo.pdf
+      - run: sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
+      - run: cat example/DEMO-TUDaExercise.tex | grep points
+      # - run: sudo apt install texlive-fonts-extra texlive-lang-cyrillic
       # - run: pdflatex --version
