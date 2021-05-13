@@ -29,7 +29,12 @@ jobs:
           sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
           cat example/DEMO-TUDaExercise.tex | grep points
       - name: Install additional TeX packages from the Ubuntu package sources
-        run: sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
+        run: |
+          sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
+          sudo apt install texlive-publishers # We install this package in order to have urcls installed.
+                                              # By doing so we get also an older version of TUDa-CI installed.
+                                              # As the cls files etc. in the working directory are considered first by pdfLaTeX,
+                                              # this should be no problem.
       - name: Get pdfLaTeX version
         run: pdflatex --version
       - name: Test if example report TeX file can be compiled
