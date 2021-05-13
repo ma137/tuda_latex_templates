@@ -21,5 +21,7 @@ jobs:
       - run: sudo apt install texlive-fonts-extra texlive-lang-cyrillic
       - run: pdflatex --version
       - run: cp tex/* example/
+      - run: cd example/
+      - run: ls -al
       - run: pdflatex example/DEMO-TUDaExercise.tex
-      - run: ls -al example/
+      - run: ls -al | grep Exercise
