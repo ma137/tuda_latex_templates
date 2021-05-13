@@ -32,6 +32,14 @@ jobs:
         run: sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
       - name: Get pdfLaTeX version
         run: pdflatex --version
+      - name: Test if example presentation TeX file can be compiled
+        run: |
+          cd example/
+          ls -al
+          echo ""
+          pdflatex DEMO-TUDaBeamer.tex
+          echo ""
+          ls -al | grep Beamer
       - name: Test if example exercise TeX file can be compiled
         run: |
           cd example/
