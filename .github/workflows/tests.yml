@@ -19,7 +19,7 @@ jobs:
       - run: ./addlicense.sh
       - run: sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
       - run: cat example/DEMO-TUDaExercise.tex | grep points
-      # - run: sudo apt install texlive-fonts-extra texlive-lang-cyrillic
+      - run: sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic
       - run: pdflatex --version
       - run: cp tex/* example/
       - run: |
