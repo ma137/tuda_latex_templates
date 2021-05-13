@@ -12,17 +12,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: ls -al
-      - run: sudo apt update
-      - run: sudo apt install texlive-latex-recommended
-      - run: echo '\shipout\hbox{}\end' | pdftex
-      - run: cp texput.pdf example/tuda_logo.pdf
-      - run: ./addlicense.sh
-      - run: sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
-      - run: cat example/DEMO-TUDaExercise.tex | grep points
-      - run: sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
-      - run: pdflatex --version
-      - run: cp tex/* example/
-      - run: |
+      - name: Install TeXLive from Ubuntu package sources
+        run: |
+          sudo apt update
+          sudo apt install texlive-latex-recommended
+      - name: Create logo file
+        run: |
+          echo '\shipout\hbox{}\end' | pdftex
+          cp texput.pdf example/tuda_logo.pdf
+      - name: Prepare the TUDa-CI template and install it
+        run: |
+          ./addlicense.sh
+          cp tex/* example/
+      - name: Do preparations specific for compilation with TeXLive 2019
+        run: |
+          sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
+          cat example/DEMO-TUDaExercise.tex | grep points
+      - name: Install additional TeX packages from the Ubuntu package sources
+        run: sudo apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
+      - name: Get pdfLaTeX version
+        run: pdflatex --version
+      - name: Test if example exercise TeX file can be compiled
+        run: |
           cd example/
           ls -al
           echo ""
