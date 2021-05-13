@@ -2,7 +2,7 @@ name: example documents compilation tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   tests:
