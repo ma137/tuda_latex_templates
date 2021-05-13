@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - run: sudo apt update
-      - run: sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-lang-cyrillic
-      - run: pdflatex --version
+      - run: ls -al
+      # - run: sudo apt update
+      # - run: sudo apt install texlive-latex-recommended texlive-fonts-extra texlive-lang-cyrillic
+      # - run: pdflatex --version
