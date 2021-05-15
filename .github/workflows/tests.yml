@@ -26,7 +26,7 @@ jobs:
           cp tex/* example/
       - name: Do preparations specific for compilation with TeXLive 2019
         run: |
-          sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
+          # sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
           cat example/DEMO-TUDaExercise.tex | grep points
       - name: Install additional TeX packages from the Ubuntu package sources
         run: |
@@ -37,19 +37,24 @@ jobs:
                                               # this should be no problem.
       - name: Get pdfLaTeX version
         run: pdflatex --version
-      - name: Test if example report TeX file can be compiled
+      - name: Test if example report TeX file can be compiled using pdflatex
         run: |
           cd example/
-          ls -al
-          echo ""
           pdflatex DEMO-TUDaReport.tex
-          echo ""
-          ls -al | grep Report
-      - name: Test if example exercise TeX file can be compiled
+      - name: Test if example exercise TeX file can be compiled using pdflatex
         run: |
           cd example/
-          ls -al
-          echo ""
           pdflatex DEMO-TUDaExercise.tex
-          echo ""
-          ls -al | grep Exercise
+      - name: Install LuaTex from the Ubuntu package sources
+        run: sudo apt install texlive-luatex
+        if: always()
+      - name: Test if example report TeX file can be compiled using lualatex
+        run: |
+          cd example/
+          lualatex DEMO-TUDaReport.tex
+        if: always()
+      - name: Test if example exercise TeX file can be compiled using lualatex
+        run: |
+          cd example/
+          lualatex DEMO-TUDaExercise.tex
+        if: always()
