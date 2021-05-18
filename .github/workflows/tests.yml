@@ -3,6 +3,7 @@ name: example documents compilation tests
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   tests:
