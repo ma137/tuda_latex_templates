@@ -2,7 +2,7 @@
 
  Copyright (C) Marei Peischl <marei@peitex.de>, 2018–2021
 
- tuda-ci 2021/05/18 v3.14
+ tuda-ci 2021/07/27 v3.17
 
 ***************************************************************************
 
@@ -48,6 +48,11 @@ Falls Sie noch keine Distribution installiert haben, finden Sie die notwendigen 
 
 #### Sonderfall: Paketverwaltung des Betriebssystems (Linux/BSD)
 Für einige Linux/BSD-Varianten existieren texlive-Pakete die über die Paketverwaltung des Systems installierbar sind. Da TUDa-CI sehr speziell ist, ist es nur in der Paketen *texlive-full* enthalten. Falls Sie ein kleineres Setup wünschen, empfehlen wir die Installation über den TeX Live Manager https://tug.org/texlive/doc/texlive-en/texlive-en.html#installation.
+
+### Nutzung von TUDa-CI über Overleaf
+
+Die TUDa verfügt über eine eigene Overleaf-Installation, auf die alle Mitglieder Zugriff haben. Die DEMO-Dateien werden dort in der jeweils aktuellen Version als Templates bereitgestellt: https://sharelatex01.ca.hrz.tu-darmstadt.de/templates/all
+Somit ist eine Nutzung ohne lokale Installation möglich.
 
 ### Logos & verwendete Bilddateien
 Die verwendeten Logos sind nicht Bestandteil dieses Bundles und können von Mitgliedern der TU Darmstadt über das interne Netzwerk heruntergeladen werden.
@@ -143,6 +148,8 @@ It's possible to install the templates using the TeX Live Manager or the MikTeX 
 In case you don't have any installed TeX system the following links might be useful:
 - Windows/Linux https://tug.org/texlive/acquire-netinstall.html
 - MacTeX  http://tug.org/mactex/
+
+It's also possible to use the TUDa-CI-DEMO files as Overleaf-Templates on TUDa's own installation: https://sharelatex01.ca.hrz.tu-darmstadt.de/templates/all (requires TUDa Account)
 
 #### Remark on texlive packages provided by Linux/BSD package managers:
 In case you already use a texlive package of your OS TUDa-CI might not be included. Since it's a personal corporate design package you might need to install *texlive-full* to use it without further adjustments. These packages also will miss the logo and – this depends on your OS – the provided package might be outdated. In this case we recomment the setup using tlmgr (as described in the upper links).
@@ -274,3 +281,12 @@ leaflets 				| DEMO-TUDaLeaflet.tex							| tudaleaflet.cls
    - fix bug in pagestyle init for department=mecheng
    - fix beamer mode selection
    - fix error in tudaexercise documentation
+ * v3.15 (2021-05-26)
+   - add \inst to tudasciposter to support multiple affiliations
+   - fix calculation of headwidth with department=mecheng
+   - improve documentation on document margins for tudapub and tudapub based examples
+ * v3.16 (2021-06-03)
+   - adjust option expansion due to changes in the LaTeX kernel
+ * v3.17 (2021-07-27)
+   - add a temporary workaround to avoid incompatibilities with pdfa=true
+   - fix footer positions

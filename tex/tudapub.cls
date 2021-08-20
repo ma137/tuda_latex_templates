@@ -120,9 +120,9 @@
 	logo .initial:n = {body},
 	paper .choices:nn = {a0,a1,a2,a3,a4,a5,a6}{
 		\int_gset_eq:NN \g_ptxcd_paper_int  \l_keys_choice_int
-		\PassOptionsToPackage{paper=\l_keys_choice_tl}{tudarules}
-		\PassOptionsToPackage{paper=\l_keys_choice_tl}{typearea}
-		\PassOptionsToPackage{\l_keys_choice_tl paper}{geometry}
+		\exp_args:Nx \PassOptionsToPackage{paper=\l_keys_choice_tl}{tudarules}
+		\exp_args:Nx \PassOptionsToPackage{paper=\l_keys_choice_tl}{typearea}
+		\exp_args:Nx \PassOptionsToPackage{\l_keys_choice_tl paper}{geometry}
 	},
 	paper .initial:n = a4,
 	IMRAD .bool_gset:N = \g_ptxcd_IMRAD_bool,
@@ -451,32 +451,6 @@
 			footwidth=text
 			}
 		}
-	\RedeclareLayer[
-		clone=scrheadings.head.above.line,
-		background,
-		contents={
-			\dim_compare:nF {\box_wd:N \ptxcd_headrule_box=\layerwidth} {
-				\ptxcd_makeheadrule[color=identbarcolor, width=\layerwidth]{ptxcd_headrule}
-			}
-			\smash{\ptxcd_headrule}
-		}
-	]{TUDa.pub.head.above.line}
-	\RedeclareLayer[
-		clone=plain.scrheadings.head.above.line,
-		background,
-		contents={
-			\dim_compare:nF {\box_wd:N \ptxcd_headrule_box=\layerwidth} {
-				\ptxcd_makeheadrule[color=identbarcolor, width=\layerwidth]{ptxcd_headrule}
-			}
-			\smash{\ptxcd_headrule}
-		}
-	]{plain.TUDa.pub.head.above.line}
-	\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{TUDa.pub.foot.even}
-	\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{TUDa.pub.foot.odd}
-	\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{TUDa.pub.foot.oneside}
-	\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{plain.TUDa.pub.foot.even}
-	\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{plain.TUDa.pub.foot.odd}
-	\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{plain.TUDa.pub.foot.oneside}
 	\bool_if:NT \g_ptxcd_headline_bool {
 		\setkomafont{pagehead}{\Large\bfseries}
 		\KOMAoptions{headlines=2}
@@ -488,6 +462,38 @@
 	}
 	\ofoot[\pagemark]{\pagemark}
 }
+
+\RedeclareLayer[
+	clone=scrheadings.head.above.line,
+	background,
+	contents={
+	\dim_compare:nF {\box_wd:N \ptxcd_headrule_box=\layerwidth} {
+		\ptxcd_makeheadrule[color=identbarcolor, width=\layerwidth]{ptxcd_headrule}
+	}
+	\smash{\ptxcd_headrule}
+	}
+]{TUDa.pub.head.above.line}
+
+\RedeclareLayer[
+	clone=plain.scrheadings.head.above.line,
+	background,
+	contents={
+	\dim_compare:nF {\box_wd:N \ptxcd_headrule_box=\layerwidth} {
+		\ptxcd_makeheadrule[color=identbarcolor, width=\layerwidth]{ptxcd_headrule}
+	}
+	\smash{\ptxcd_headrule}
+	}
+]{plain.TUDa.pub.head.above.line}
+
+%\dim_set:Nn \l_tmpa_dim {\topmargin+1in+\headheight+\headsep+\textheight
+%	+\footskip+\dp\strutbox-\footheight +\c_ptxcd_rulesep_dim}
+\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{TUDa.pub.foot.even}
+\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{TUDa.pub.foot.odd}
+\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{TUDa.pub.foot.oneside}
+\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{plain.TUDa.pub.foot.even}
+\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{plain.TUDa.pub.foot.odd}
+\ModifyLayer[addvoffset=\c_ptxcd_rulesep_dim]{plain.TUDa.pub.foot.oneside}
+
 
 \DeclarePageStyleAlias{TUDa}{TUDa.pub}
 \DeclarePageStyleAlias{plain.TUDa}{plain.TUDa.pub}
@@ -773,10 +779,33 @@
 	This~can~lead~to~incompatiblities~especially~with~older~compiler~versions.\\
 	You~should~prefer~using~lualatex.
 	}
-
-
-	\PassOptionsToPackage{a-2b}{pdfx}
-	\RequirePackage{pdfx}
+	%only apply the hack if pdfx is older than the working version
+	\@ifpackagelater{pdfx}{2021/07/06}{
+		\PassOptionsToPackage{a-2b}{pdfx}
+		\RequirePackage{pdfx}
+	} {
+		\msg_new:nnnn{tudapub} {dirty-hack-pdfa} {
+			I~have~to~use~a~dirty~hack~to~workaround~some~incompatibilites~between~your~LaTeX~version~and~the~pdfa-mode.\\
+			Please~use~pdfa=true~only~if~you~really~need~it.\\
+			We~will~remove~this~hack~as~soon~as~all~incompatibilities~have~been~patched.
+		} {
+			See~the~corresponding~GitHub~Issue~for~more~information:~https://github.com/tudace/tuda_latex_templates/issues/321
+		}
+		\msg_warning:nn {tudapub} {dirty-hack-pdfa}
+		%check if \par is expanable and add a dirty hack
+		%Thanks to Ross Moore for the support
+		\expandafter\ifx\csname tex_par:D\endcsname \relax
+			\let\pdfx@par\par
+		\else
+			\expandafter\let\expandafter\pdfx@par\csname tex_par:D\endcsname
+		\fi
+		\let\orig@par\par
+		\let\par\pdfx@par
+		\PassOptionsToPackage{a-2b}{pdfx}
+		\RequirePackage{pdfx}
+		%restore\par
+		\let\par\orig@par
+	}
 
 	\sys_if_engine_pdftex:T {
 		\msg_warning:nnn{tudapub} {prefer-lualatex} {PDFTeX}
