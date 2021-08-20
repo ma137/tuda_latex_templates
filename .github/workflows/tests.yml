@@ -26,7 +26,7 @@ jobs:
           apt-get -y install texlive-latex-recommended
       - name: Create logo file
         run: |
-          'echo "\shipout\hbox{}\end\" > logo.tex'
+          echo "\shipout\hbox{}\end\" > logo.tex
           cat logo.tex
           pdftex logo.tex
           cp logo.pdf example/tuda_logo.pdf
