@@ -53,7 +53,7 @@ jobs:
       - name: Test if example PhD thesis TeX file with english as main language can be compiled using pdflatex
         run: |
           cd example/
-          sed -i 's/\usepackage[english, main=ngerman]{babel}/\usepackage[ngerman, main=english]{babel}/g' example/DEMO-TUDaPhD.tex
+          sed -i 's/\usepackage[english, main=ngerman]{babel}/\usepackage[ngerman, main=english]{babel}/g' DEMO-TUDaPhD.tex
           pdflatex DEMO-TUDaPhD.tex
       - name: Install LuaTex from the Ubuntu package sources
         run: sudo apt install texlive-luatex
