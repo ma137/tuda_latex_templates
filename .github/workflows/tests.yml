@@ -21,8 +21,8 @@ jobs:
       - run: ls -al
       - name: Install TeXLive from Ubuntu package sources
         run: |
-          apt update
-          apt install texlive-latex-recommended
+          apt-get update
+          apt-get -y install texlive-latex-recommended
       - name: Create logo file
         run: |
           echo '\shipout\hbox{}\end' | pdftex
@@ -37,8 +37,8 @@ jobs:
           cat example/DEMO-TUDaExercise.tex | grep points
       - name: Install additional TeX packages from the Ubuntu package sources
         run: |
-          apt install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
-          apt install texlive-publishers # We install this package in order to have urcls installed.
+          apt-get -y install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
+          apt-get -y install texlive-publishers # We install this package in order to have urcls installed.
                                               # By doing so we get also an older version of TUDa-CI installed.
                                               # As the cls files etc. in the working directory are considered first by pdfLaTeX,
                                               # this should be no problem.
@@ -63,7 +63,7 @@ jobs:
           cat DEMO-TUDaPhD.tex | grep babel
           pdflatex DEMO-TUDaPhD.tex
       - name: Install LuaTex from the Ubuntu package sources
-        run: apt install texlive-luatex
+        run: apt-get -y install texlive-luatex
         if: always()
       - name: Test if example report TeX file can be compiled using lualatex
         run: |
