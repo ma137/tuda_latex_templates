@@ -21,8 +21,8 @@ jobs:
       - run: ls -al
       - name: Install TeXLive from Ubuntu package sources
         run: |
-          env DEBIAN_FRONTEND="noninteractive"
           apt-get update
+          DEBIAN_FRONTEND="noninteractive" TZ="Europe/Berlin" apt-get install -y tzdata
           apt-get -y install texlive-latex-recommended
       - name: Create logo file
         run: |
