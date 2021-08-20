@@ -26,11 +26,14 @@ jobs:
           apt-get -y install texlive-latex-recommended
       - name: Create logo file
         run: |
-          echo "\shipout\hbox{}\\end" > logo.tex
-          cat logo.tex
-          pdftex logo.tex
-          cp logo.pdf example/tuda_logo.pdf
-          # cp texput.pdf example/tuda_logo.pdf
+          # echo "\shipout\hbox{}\end" > logo.tex
+          # cat logo.tex
+          # pdftex logo.tex
+          # cp logo.pdf example/tuda_logo.pdf
+          # # cp texput.pdf example/tuda_logo.pdf
+          apt-get -y install wget
+          wget http://mirrors.ctan.org/macros/latex/contrib/tuda-ci/doc/DEMO-TUDaLetter.pdf
+          cp DEMO-TUDaLetter.pdf example/tuda_logo.pdf
       - name: Prepare the TUDa-CI template and install it
         run: |
           ./addlicense.sh
