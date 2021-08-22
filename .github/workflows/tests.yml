@@ -75,6 +75,7 @@ jobs:
           cat DEMO-TUDaPhD.tex | grep babel
           pdflatex DEMO-TUDaPhD.tex
       - name: '[only a technical step]'
+        run: echo " "
         if: always()
       - name: Install LuaTex from the Ubuntu package sources
         id: lualatex_installation
