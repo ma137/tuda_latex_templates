@@ -129,5 +129,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: test results report
-          path: ${{ test_results_filename }}
+          path: ${{ env.test_results_filename }}
         if: always() && steps.test_overview.outcome == 'success'
