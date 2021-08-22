@@ -80,7 +80,7 @@ jobs:
       - name: Install LuaTex from the Ubuntu package sources
         id: lualatex_installation
         run: apt-get -y install texlive-luatex
-        if: steps.installation_final_step.outcome == 'success'
+        if: always() && steps.installation_final_step.outcome == 'success'
       - name: Test if example report TeX file can be compiled using lualatex
         id: lualatex_report
         run: |
