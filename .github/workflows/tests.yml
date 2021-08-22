@@ -43,6 +43,7 @@ jobs:
           # sed -i 's/points=true/points=false/g' example/DEMO-TUDaExercise.tex
           cat example/DEMO-TUDaExercise.tex | grep points
       - name: Install additional TeX packages from the Ubuntu package sources
+        id: installation_final_step
         run: |
           apt-get -y install texlive-latex-extra texlive-fonts-extra texlive-lang-cyrillic texlive-lang-german texlive-bibtex-extra
           apt-get -y install texlive-publishers # We install this package in order to have urcls installed.
@@ -52,33 +53,56 @@ jobs:
       - name: Get pdfLaTeX version
         run: pdflatex --version
       - name: Test if example report TeX file can be compiled using pdflatex
+        id: pdflatex_report
         run: |
           cd example/
           pdflatex DEMO-TUDaReport.tex
       - name: Test if example exercise TeX file can be compiled using pdflatex
+        id: pdflatex_exercise
         run: |
           cd example/
           pdflatex DEMO-TUDaExercise.tex
       - name: Test if example PhD thesis TeX file can be compiled using pdflatex
+        id: pdflatex_phd
         run: |
           cd example/
           pdflatex DEMO-TUDaPhD.tex
       - name: Test if example PhD thesis TeX file with english as main language can be compiled using pdflatex
+        id: pdflatex_phd_en
         run: |
           cd example/
           sed -i 's/usepackage\[english, main=ngerman\]{babel}/usepackage\[ngerman, main=english\]{babel}/g' DEMO-TUDaPhD.tex
           cat DEMO-TUDaPhD.tex | grep babel
           pdflatex DEMO-TUDaPhD.tex
       - name: Install LuaTex from the Ubuntu package sources
+        id: lualatex_installation
         run: apt-get -y install texlive-luatex
-        if: always()
+        if: steps.installation_final_step.outcome == 'success'
       - name: Test if example report TeX file can be compiled using lualatex
+        id: lualatex_report
         run: |
           cd example/
           lualatex DEMO-TUDaReport.tex
-        if: always()
+        if: steps.lualatex_installation.outcome == 'success'
       - name: Test if example exercise TeX file can be compiled using lualatex
+        id: lualatex_exercise
         run: |
           cd example/
           lualatex DEMO-TUDaExercise.tex
-        if: always()
+        if: steps.lualatex_installation.outcome == 'success'
+      - name: Test if example PhD thesis TeX file can be compiled using lualatex
+        id: lualatex_phd
+        run: |
+          cd example/
+          sed -i 's/usepackage\[ngerman, main=english\]{babel}/usepackage\[english, main=ngerman\]{babel}/g' DEMO-TUDaPhD.tex
+          cat DEMO-TUDaPhD.tex | grep babel
+          lualatex DEMO-TUDaPhD.tex
+        if: steps.lualatex_installation.outcome == 'success'
+      - name: Test if example PhD thesis TeX file with english as main language can be compiled using lualatex
+        id: lualatex_phd_en
+        run: |
+          cd example/
+          sed -i 's/usepackage\[english, main=ngerman\]{babel}/usepackage\[ngerman, main=english\]{babel}/g' DEMO-TUDaPhD.tex
+          cat DEMO-TUDaPhD.tex | grep babel
+          lualatex DEMO-TUDaPhD.tex
+        if: steps.lualatex_installation.outcome == 'success'
