@@ -106,3 +106,25 @@ jobs:
           cat DEMO-TUDaPhD.tex | grep babel
           lualatex DEMO-TUDaPhD.tex
         if: always() && steps.lualatex_installation.outcome == 'success'
+     
+      - name: Create overview of test results
+        id: test_overview
+        run: |
+          echo "# Overview of tests run on ${{ matrix.container }}" > test_results.md
+          echo "" > test_results.md
+          echo "* compile DEMO-TUDaReport.tex using PDFLaTeX: ${{ steps.pdflatex_report.outcome }}" > test_results.md
+          echo "* compile DEMO-TUDaExercise.tex using PDFLaTeX: ${{ steps.pdflatex_exercise.outcome }}" > test_results.md
+          echo "* compile DEMO-TUDaPhD.tex using PDFLaTeX: ${{ steps.pdflatex_phd.outcome }}" > test_results.md
+          echo "* compile DEMO-TUDaPhD.tex using PDFLaTeX (English as main language): ${{ steps.pdflatex_phd_en.outcome }}" > test_results.md
+          echo "" > test_results.md
+          echo "* compile DEMO-TUDaReport.tex using LuaLaTeX: ${{ steps.lualatex_report.outcome }}" > test_results.md
+          echo "* compile DEMO-TUDaExercise.tex using LuaLaTeX: ${{ steps.lualatex_exercise.outcome }}" > test_results.md
+          echo "* compile DEMO-TUDaPhD.tex using LuaLaTeX: ${{ steps.lualatex_phd.outcome }}" > test_results.md
+          echo "* compile DEMO-TUDaPhD.tex using LuaLaTeX (English as main language): ${{ steps.lualatex_phd_en.outcome }}" > test_results.md
+        if: always() && steps.installation_final_step.outcome == 'success' && steps.lualatex_installation.outcome == 'success'
+      - name: Archive overview of test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test results report
+          path: test_results.md
+        if: always() && steps.test_overview.outcome == 'success'
